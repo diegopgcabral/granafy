@@ -4,12 +4,15 @@
 # Next.js
 /.next
 /out
+/.vercel
 
 # production
 /build
 
 # local environment files
 .env*.local
+.env*
+!.env.example
 
 # logs
 npm-debug.log*

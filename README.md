@@ -22,6 +22,18 @@ npm run build
 npm test
 ```
 
+## Configuração de ambiente
+
+Copie `.env.example` para `.env.local` e preencha as variáveis do projeto Supabase. Nunca versione `.env.local` ou chaves de acesso.
+
+```bash
+cp .env.example .env.local
+```
+
+## Deploy
+
+O deploy de produção será feito pela Vercel a partir da branch `main`. Crie os projetos do Supabase e da Vercel, conecte este repositório GitHub e configure as variáveis presentes em `.env.example` nos ambientes de Preview e Production.
+
 ## Estrutura
 
 - `app/`: rotas e interface com Next.js App Router.
