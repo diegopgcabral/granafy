@@ -147,9 +147,9 @@ O projeto deverá utilizar migrations para controlar alterações no banco.
 
 # 5. Autenticação
 
-A autenticação será inicialmente feita utilizando:
+A autenticação será inicialmente feita utilizando **Supabase Auth com Google OAuth**.
 
-**Supabase Auth**
+O primeiro fluxo de acesso será exclusivamente o login com a conta Google. Cadastro por e-mail e senha, recuperação de senha e outros provedores ficam fora do escopo inicial e só entram mediante necessidade explícita.
 
 O sistema deverá ser preparado para múltiplos usuários.
 
@@ -844,9 +844,9 @@ Definir como o usuário autenticado será relacionado às tabelas financeiras. C
 
 ### Etapa B2 — Autenticação e rotas protegidas
 
-Implementar cadastro, login, logout, recuperação de sessão, redirecionamento de rotas privadas e estado de carregamento. A interface autenticada deve exibir o usuário atual e oferecer saída da conta.
+Implementar login com Google OAuth, logout, recuperação de sessão, redirecionamento de rotas privadas e estado de carregamento. A interface autenticada deve exibir o usuário atual e oferecer saída da conta.
 
-**Critério de aceite:** um visitante não acessa rotas financeiras; ao entrar e sair, a sessão e os redirecionamentos funcionam; duas contas não enxergam a área de dados uma da outra.
+**Critério de aceite:** um visitante não acessa rotas financeiras; o login Google retorna à aplicação com uma sessão válida; ao sair, a sessão e os redirecionamentos funcionam; duas contas não enxergam a área de dados uma da outra.
 
 ## Marco C — Fundamento financeiro
 
@@ -1117,8 +1117,7 @@ O primeiro MVP deverá conter somente:
 
 ### Autenticação
 
-- Cadastro
-- Login
+- Login com Google
 - Logout
 
 ### Receitas
