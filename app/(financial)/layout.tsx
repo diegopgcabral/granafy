@@ -12,6 +12,7 @@ export default async function FinancialLayout({
   let isAuthenticated = false;
   let displayName = "Usuário";
   let email: string | undefined;
+  let cycleStartDay = 1;
 
   try {
     const supabase = await createClient();
@@ -25,10 +26,11 @@ export default async function FinancialLayout({
     if (isAuthenticated) {
       const { data: profile } = await supabase
         .from("profiles")
-        .select("display_name")
+        .select("display_name, financial_cycle_start_day")
         .eq("id", userId)
         .maybeSingle();
       displayName = profile?.display_name || email?.split("@")[0] || "Usuário";
+      cycleStartDay = profile?.financial_cycle_start_day ?? 1;
     }
   } catch {
     redirect("/login?error=configuration");
@@ -39,7 +41,11 @@ export default async function FinancialLayout({
   }
 
   return (
-    <FinancialShell displayName={displayName} email={email}>
+    <FinancialShell
+      cycleStartDay={cycleStartDay}
+      displayName={displayName}
+      email={email}
+    >
       {children}
     </FinancialShell>
   );

@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   createExpenseSchema,
   createIncomeSchema,
+  normalizeCurrencyInput,
 } from "@/lib/financial/contracts";
 import { calculateMonthlySummary } from "@/lib/financial/monthly-summary";
 
@@ -27,6 +28,11 @@ test("rejects an income with a zero amount", () => {
   });
 
   assert.equal(result.success, false);
+});
+
+test("normalizes Brazilian currency input before validating it", () => {
+  assert.equal(normalizeCurrencyInput("50.000,25"), "50000.25");
+  assert.equal(normalizeCurrencyInput("50000.25"), "50000.25");
 });
 
 test("rejects an expense payment larger than its reference amount", () => {

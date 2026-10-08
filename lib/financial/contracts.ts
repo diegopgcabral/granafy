@@ -108,3 +108,17 @@ export function amountToCents(amount: string) {
   const [whole, decimal = ""] = amount.split(".");
   return BigInt(whole) * 100n + BigInt(`${decimal}00`.slice(0, 2));
 }
+
+export function normalizeCurrencyInput(value: string) {
+  const normalized = value.trim().replace(/\s/g, "");
+
+  if (/^\d{1,12}(?:\.\d{1,2})?$/.test(normalized)) {
+    return normalized;
+  }
+
+  if (/^\d{1,12}(?:\.\d{3})*(?:,\d{1,2})?$/.test(normalized)) {
+    return normalized.replaceAll(".", "").replace(",", ".");
+  }
+
+  return normalized;
+}
