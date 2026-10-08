@@ -24,11 +24,15 @@ npm test
 
 ## Configuração de ambiente
 
-Copie `.env.example` para `.env.local` e preencha as variáveis do projeto Supabase. Nunca versione `.env.local` ou chaves de acesso.
+Copie `.env.example` para `.env.local` e preencha a URL e a chave publicável do projeto Supabase. Nunca versione `.env.local` ou chaves de acesso.
 
 ```bash
 cp .env.example .env.local
 ```
+
+## Login com Google
+
+O acesso é feito exclusivamente por Google OAuth. Antes de testar o fluxo, configure o provedor Google no Supabase e registre as URLs de callback descritas na [documentação do Supabase](https://supabase.com/docs/guides/auth/social-login/auth-google). Use `http://localhost:3000/auth/callback` para desenvolvimento e adicione a URL de produção em **Authentication > URL Configuration**.
 
 ## Deploy
 
