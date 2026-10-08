@@ -1,0 +1,110 @@
+import { z } from "zod";
+
+export const expenseStatuses = [
+  "PENDING",
+  "PARTIAL",
+  "PAID",
+  "CANCELLED",
+] as const;
+
+export const expenseStatusSchema = z.enum(expenseStatuses);
+
+const decimalAmountSchema = z
+  .string()
+  .regex(
+    /^\d{1,12}(?:\.\d{1,2})?$/,
+    "Use um valor positivo com até duas casas decimais.",
+  );
+
+const positiveAmountSchema = decimalAmountSchema.refine(
+  (value) => amountToCents(value) > 0n,
+  "O valor deve ser maior que zero.",
+);
+
+const dateSchema = z.iso.date();
+const descriptionSchema = z.string().trim().min(1).max(200);
+const categorySchema = z.string().trim().min(1).max(100);
+const notesSchema = z.string().trim().max(2_000).optional();
+
+export const createIncomeSchema = z.object({
+  description: descriptionSchema,
+  amount: positiveAmountSchema,
+  receivedOn: dateSchema,
+  category: categorySchema,
+  notes: notesSchema,
+});
+
+export const createExpenseSchema = z
+  .object({
+    description: descriptionSchema,
+    referenceAmount: positiveAmountSchema,
+    paidAmount: decimalAmountSchema.default("0"),
+    dueDate: dateSchema,
+    paidAt: dateSchema.optional(),
+    category: categorySchema,
+    status: expenseStatusSchema.default("PENDING"),
+    notes: notesSchema,
+  })
+  .superRefine((expense, context) => {
+    const referenceAmount = amountToCents(expense.referenceAmount);
+    const paidAmount = amountToCents(expense.paidAmount);
+
+    if (paidAmount > referenceAmount) {
+      context.addIssue({
+        code: "custom",
+        message: "O valor pago não pode ser maior que o valor previsto.",
+        path: ["paidAmount"],
+      });
+    }
+
+    const expectedStatus =
+      paidAmount === 0n
+        ? "PENDING"
+        : paidAmount === referenceAmount
+          ? "PAID"
+          : "PARTIAL";
+
+    if (
+      expense.status === "CANCELLED" &&
+      (paidAmount !== 0n || expense.paidAt)
+    ) {
+      context.addIssue({
+        code: "custom",
+        message: "Uma despesa cancelada não pode ter pagamento registrado.",
+        path: ["status"],
+      });
+    }
+
+    if (expense.status !== expectedStatus && expense.status !== "CANCELLED") {
+      context.addIssue({
+        code: "custom",
+        message: "O status não corresponde ao valor pago.",
+        path: ["status"],
+      });
+    }
+
+    if (paidAmount > 0n && !expense.paidAt) {
+      context.addIssue({
+        code: "custom",
+        message: "Informe a data do pagamento.",
+        path: ["paidAt"],
+      });
+    }
+
+    if (paidAmount === 0n && expense.paidAt) {
+      context.addIssue({
+        code: "custom",
+        message: "Uma despesa sem pagamento não pode ter data de pagamento.",
+        path: ["paidAt"],
+      });
+    }
+  });
+
+export type CreateIncomeInput = z.infer<typeof createIncomeSchema>;
+export type CreateExpenseInput = z.infer<typeof createExpenseSchema>;
+export type ExpenseStatus = z.infer<typeof expenseStatusSchema>;
+
+export function amountToCents(amount: string) {
+  const [whole, decimal = ""] = amount.split(".");
+  return BigInt(whole) * 100n + BigInt(`${decimal}00`.slice(0, 2));
+}

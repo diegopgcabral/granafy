@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ExpenseStatus {
+  PENDING
+  PARTIAL
+  PAID
+  CANCELLED
+
+  @@map("expense_status")
+}
+
+model Profile {
+  id          String    @id @db.Uuid
+  displayName String?   @map("display_name")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  incomes     Income[]
+  expenses    Expense[]
+
+  @@map("profiles")
+}
+
+model Income {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  description String
+  amount      Decimal  @db.Decimal(14, 2)
+  receivedOn  DateTime @map("received_on") @db.Date
+  category    String
+  notes       String?
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  user        Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, receivedOn(sort: Desc)])
+  @@map("incomes")
+}
+
+model Expense {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String        @map("user_id") @db.Uuid
+  description     String
+  referenceAmount Decimal       @map("reference_amount") @db.Decimal(14, 2)
+  paidAmount      Decimal       @default(0) @map("paid_amount") @db.Decimal(14, 2)
+  dueDate         DateTime      @map("due_date") @db.Date
+  paidAt          DateTime?     @map("paid_at") @db.Date
+  category        String
+  status          ExpenseStatus @default(PENDING)
+  notes           String?
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  user            Profile       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, dueDate(sort: Desc)])
+  @@index([userId, status, dueDate(sort: Desc)])
+  @@map("expenses")
+}
