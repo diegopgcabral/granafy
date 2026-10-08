@@ -10,30 +10,75 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const { error } = await searchParams;
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-zinc-950 px-6 text-zinc-50">
-      <section className="w-full max-w-sm space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900 p-8 shadow-2xl">
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-emerald-400">GRANAFY</p>
-          <h1 className="text-2xl font-semibold">Acesse suas finanças</h1>
-          <p className="text-sm leading-6 text-zinc-400">
-            Entre com sua conta Google para continuar.
-          </p>
+    <main className="relative min-h-screen overflow-hidden bg-[#080b10] text-slate-100">
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0">
+        <div className="granafy-grid absolute inset-0 opacity-70" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_45%_25%,rgba(0,229,153,0.14),transparent_38%),radial-gradient(circle_at_95%_55%,rgba(14,165,233,0.12),transparent_32%)]" />
+        <div className="absolute bottom-0 -left-40 size-[30rem] rounded-full bg-emerald-400/10 blur-3xl" />
+      </div>
+
+      <header className="relative z-10 border-b border-white/5 bg-[#080b10]/70 backdrop-blur-xl">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+          <Link className="group flex items-center gap-3" href="/">
+            <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-500 to-emerald-300 p-px shadow-lg shadow-emerald-400/20 transition group-hover:scale-105">
+              <span className="flex size-full items-center justify-center rounded-[11px] bg-[#080b10]">
+                <svg
+                  aria-hidden="true"
+                  className="size-5 text-emerald-400"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="m12 2 2.6 7.4L22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6L12 2Z" />
+                </svg>
+              </span>
+            </span>
+            <span className="text-2xl font-bold tracking-tight text-white">
+              Granafy<span className="text-emerald-400">.</span>
+            </span>
+          </Link>
         </div>
-        {error ? (
-          <p
-            aria-live="polite"
-            className="rounded-md bg-red-950 px-3 py-2 text-sm text-red-200"
-          >
-            Não foi possível concluir o login. Tente novamente.
-          </p>
-        ) : null}
-        <GoogleSignInButton />
-        <Link
-          className="block text-center text-sm text-zinc-400 hover:text-zinc-200"
-          href="/"
-        >
-          Voltar para a página inicial
-        </Link>
+      </header>
+
+      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-80px)] max-w-7xl items-center px-6 py-14">
+        <div className="max-w-2xl space-y-8">
+          <div className="space-y-5">
+            <h1 className="text-4xl leading-[1.1] font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+              Clareza para cuidar do seu{" "}
+              <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-white bg-clip-text text-transparent">
+                dinheiro.
+              </span>
+            </h1>
+            <p className="max-w-xl text-lg leading-relaxed text-slate-300 sm:text-xl">
+              Entre com sua conta Google para acessar o Granafy.
+            </p>
+          </div>
+          <div className="max-w-sm space-y-4">
+            {error ? (
+              <p
+                aria-live="polite"
+                className="rounded-lg border border-red-400/20 bg-red-950/50 px-3 py-2 text-sm text-red-200"
+              >
+                Não foi possível concluir o login. Tente novamente.
+              </p>
+            ) : null}
+            <GoogleSignInButton />
+            <p className="flex items-center gap-2 text-xs font-medium text-slate-400">
+              <svg
+                aria-hidden="true"
+                className="size-4 shrink-0 text-emerald-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  clipRule="evenodd"
+                  d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.71-9.29a1 1 0 0 0-1.42-1.42L9 10.59 7.71 9.3A1 1 0 0 0 6.3 10.7l2 2a1 1 0 0 0 1.41 0l4-4Z"
+                  fillRule="evenodd"
+                />
+              </svg>
+              Acesso seguro com sua conta Google
+            </p>
+          </div>
+        </div>
       </section>
     </main>
   );
