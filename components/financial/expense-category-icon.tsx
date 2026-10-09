@@ -5,6 +5,11 @@ import {
 
 const categoryRules: Array<[string[], ExpenseCategoryIconKey, string]> = [
   [
+    ["medicamento", "remedio", "remedios"],
+    "medicine",
+    "text-sky-300 bg-sky-400/10 border-sky-400/20",
+  ],
+  [
     ["aliment", "mercado", "refei"],
     "food",
     "text-emerald-300 bg-emerald-400/10 border-emerald-400/20",
@@ -85,6 +90,7 @@ const iconColors: Record<ExpenseCategoryIconKey, string> = {
   card: "text-purple-300 bg-purple-400/10 border-purple-400/20",
   car: "text-amber-300 bg-amber-400/10 border-amber-400/20",
   health: "text-cyan-300 bg-cyan-400/10 border-cyan-400/20",
+  medicine: "text-sky-300 bg-sky-400/10 border-sky-400/20",
   education: "text-emerald-300 bg-emerald-400/10 border-emerald-400/20",
   subscription: "text-pink-300 bg-pink-400/10 border-pink-400/20",
   water: "text-sky-300 bg-sky-400/10 border-sky-400/20",
@@ -179,6 +185,10 @@ function CategoryIconPath({ icon }: { icon: ExpenseCategoryIconKey }) {
     case "health":
       return (
         <path d="M20.8 8.8c0 5.4-8.8 10.2-8.8 10.2S3.2 14.2 3.2 8.8A4.5 4.5 0 0 1 12 7.4a4.5 4.5 0 0 1 8.8 1.4Z" />
+      );
+    case "medicine":
+      return (
+        <path d="m8.3 18.7-3-3a3.5 3.5 0 0 1 0-5l5.4-5.4a3.5 3.5 0 1 1 5 5l-5.4 5.4a3.5 3.5 0 0 1-5 0ZM8 8l8 8" />
       );
     case "education":
       return (
