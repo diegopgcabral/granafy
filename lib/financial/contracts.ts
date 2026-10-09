@@ -1,11 +1,6 @@
 import { z } from "zod";
 
-export const expenseStatuses = [
-  "PENDING",
-  "PARTIAL",
-  "PAID",
-  "CANCELLED",
-] as const;
+export const expenseStatuses = ["PENDING", "PAID", "CANCELLED"] as const;
 
 export const expenseStatusSchema = z.enum(expenseStatuses);
 
@@ -40,62 +35,18 @@ export const createExpenseSchema = z
     referenceAmount: positiveAmountSchema,
     paidAmount: decimalAmountSchema.default("0"),
     dueDate: dateSchema,
-    paidAt: dateSchema.optional(),
     category: categorySchema,
     status: expenseStatusSchema.default("PENDING"),
     notes: notesSchema,
   })
   .superRefine((expense, context) => {
-    const referenceAmount = amountToCents(expense.referenceAmount);
     const paidAmount = amountToCents(expense.paidAmount);
 
-    if (paidAmount > referenceAmount) {
-      context.addIssue({
-        code: "custom",
-        message: "O valor pago não pode ser maior que o valor previsto.",
-        path: ["paidAmount"],
-      });
-    }
-
-    const expectedStatus =
-      paidAmount === 0n
-        ? "PENDING"
-        : paidAmount === referenceAmount
-          ? "PAID"
-          : "PARTIAL";
-
-    if (
-      expense.status === "CANCELLED" &&
-      (paidAmount !== 0n || expense.paidAt)
-    ) {
+    if (expense.status === "CANCELLED" && paidAmount !== 0n) {
       context.addIssue({
         code: "custom",
         message: "Uma despesa cancelada não pode ter pagamento registrado.",
         path: ["status"],
-      });
-    }
-
-    if (expense.status !== expectedStatus && expense.status !== "CANCELLED") {
-      context.addIssue({
-        code: "custom",
-        message: "O status não corresponde ao valor pago.",
-        path: ["status"],
-      });
-    }
-
-    if (paidAmount > 0n && !expense.paidAt) {
-      context.addIssue({
-        code: "custom",
-        message: "Informe a data do pagamento.",
-        path: ["paidAt"],
-      });
-    }
-
-    if (paidAmount === 0n && expense.paidAt) {
-      context.addIssue({
-        code: "custom",
-        message: "Uma despesa sem pagamento não pode ter data de pagamento.",
-        path: ["paidAt"],
       });
     }
   });
@@ -107,4 +58,18 @@ export type ExpenseStatus = z.infer<typeof expenseStatusSchema>;
 export function amountToCents(amount: string) {
   const [whole, decimal = ""] = amount.split(".");
   return BigInt(whole) * 100n + BigInt(`${decimal}00`.slice(0, 2));
+}
+
+export function normalizeCurrencyInput(value: string) {
+  const normalized = value.trim().replace(/\s/g, "");
+
+  if (/^\d{1,12}(?:\.\d{1,2})?$/.test(normalized)) {
+    return normalized;
+  }
+
+  if (/^\d{1,12}(?:\.\d{3})*(?:,\d{1,2})?$/.test(normalized)) {
+    return normalized.replaceAll(".", "").replace(",", ".");
+  }
+
+  return normalized;
 }

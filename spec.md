@@ -928,6 +928,14 @@ Adicionar análises e projeções somente quando houver histórico suficiente e 
 
 **Critério de aceite:** toda resposta analítica informa período, fonte dos dados e premissas; os números podem ser reproduzidos sem depender da resposta do LLM.
 
+## Backlog de produto
+
+### Duplicar despesas ao avançar o ciclo financeiro
+
+Ao navegar para um novo ciclo financeiro, oferecer uma ação explícita para duplicar as despesas do ciclo anterior. A ação deverá permitir revisar quais lançamentos serão copiados antes de confirmar.
+
+Cada cópia deve pertencer ao novo ciclo, ter a data de vencimento ajustada para o período correspondente e iniciar com `PENDING`, valor pago igual a zero e sem data de pagamento. Nenhum pagamento, status `PARTIAL` ou `PAID`, nem observação de quitação deve ser carregado da despesa original. A operação deve ser idempotente ou informar claramente quais despesas já foram duplicadas, evitando lançamentos repetidos.
+
 ## Regras de priorização
 
 Ao terminar cada etapa, registrar problemas observados e escolher a próxima tarefa nesta ordem:

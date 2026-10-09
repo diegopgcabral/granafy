@@ -13,9 +13,45 @@ body {
   background: #09090b;
 }
 
+.income-input {
+  width: 100%;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 0.75rem;
+  background: rgb(11 14 19 / 0.7);
+  padding: 0.625rem 0.75rem;
+  color: #e2e8f0;
+  outline: none;
+}
+
+.income-input:focus {
+  border-color: rgb(52 211 153 / 0.7);
+  box-shadow: 0 0 0 3px rgb(52 211 153 / 0.12);
+}
+
+.category-search-input {
+  padding-right: 2.75rem;
+  padding-left: 2.75rem;
+}
+
 .granafy-grid {
   background-image:
     linear-gradient(to right, rgb(255 255 255 / 0.03) 1px, transparent 1px),
     linear-gradient(to bottom, rgb(255 255 255 / 0.03) 1px, transparent 1px);
   background-size: 48px 48px;
+}
+
+.category-scroll {
+  scrollbar-color: rgb(71 85 105) transparent;
+  scrollbar-width: thin;
+}
+
+.category-scroll::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.category-scroll::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  background: rgb(71 85 105);
+  background-clip: padding-box;
 }
