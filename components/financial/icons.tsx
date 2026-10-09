@@ -1,5 +1,7 @@
 type IconName =
   | "calendar"
+  | "chevronDown"
+  | "chevronUp"
   | "chevronLeft"
   | "chevronRight"
   | "dashboard"
@@ -14,6 +16,8 @@ type IconName =
   | "category"
   | "more"
   | "pause"
+  | "receipt"
+  | "search"
   | "settings";
 
 type IconProps = {
@@ -24,6 +28,8 @@ type IconProps = {
 export function Icon({ name, className = "size-5" }: IconProps) {
   const paths: Record<IconName, React.ReactNode> = {
     calendar: <rect height="14" rx="2" width="16" x="4" y="5" />,
+    chevronDown: <path d="m6 9 6 6 6-6" />,
+    chevronUp: <path d="m18 15-6-6-6 6" />,
     chevronLeft: <path d="m14 18-6-6 6-6" />,
     chevronRight: <path d="m10 6 6 6-6 6" />,
     dashboard: (
@@ -58,6 +64,18 @@ export function Icon({ name, className = "size-5" }: IconProps) {
     ),
     more: <path d="M12 5h.01M12 12h.01M12 19h.01" strokeWidth="3" />,
     pause: <path d="M8 5v14M16 5v14" strokeWidth="2.4" />,
+    receipt: (
+      <>
+        <path d="M6 3h12v18l-2.5-1.5L12 21l-3.5-1.5L6 21V3Z" />
+        <path d="M9 8h6M9 12h6M9 16h4" />
+      </>
+    ),
+    search: (
+      <>
+        <circle cx="11" cy="11" r="6" />
+        <path d="m16 16 4 4" />
+      </>
+    ),
     settings: (
       <>
         <circle cx="12" cy="12" r="3" />

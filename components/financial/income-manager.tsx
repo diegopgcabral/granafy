@@ -47,9 +47,16 @@ function formatCurrencyInput(value: string | number) {
   }).format(amount);
 }
 
+function formatStoredCurrency(value: string | number) {
+  return new Intl.NumberFormat("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Number(value));
+}
+
 function CurrencyInput({ defaultValue }: { defaultValue?: string | number }) {
   const [value, setValue] = useState(() =>
-    defaultValue === undefined ? "" : formatCurrencyInput(defaultValue),
+    defaultValue === undefined ? "" : formatStoredCurrency(defaultValue),
   );
 
   return (

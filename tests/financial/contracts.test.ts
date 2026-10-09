@@ -35,41 +35,30 @@ test("normalizes Brazilian currency input before validating it", () => {
   assert.equal(normalizeCurrencyInput("50000.25"), "50000.25");
 });
 
-test("rejects an expense payment larger than its reference amount", () => {
+test("accepts an expense payment larger than its reference amount", () => {
   const result = createExpenseSchema.safeParse({
     description: "Condomínio",
     referenceAmount: "850.00",
     paidAmount: "900.00",
-    paidAt: "2026-10-10",
     dueDate: "2026-10-10",
     category: "Moradia",
     status: "PAID",
   });
 
-  assert.equal(result.success, false);
+  assert.equal(result.success, true);
 });
 
-test("requires a consistent partial payment", () => {
-  const validResult = createExpenseSchema.safeParse({
-    description: "Cartão",
-    referenceAmount: "4200.00",
-    paidAmount: "2100.00",
-    paidAt: "2026-10-08",
+test("accepts a paid expense even when its value differs from the planned amount", () => {
+  const result = createExpenseSchema.safeParse({
+    description: "Supermercado",
+    referenceAmount: "1000.00",
+    paidAmount: "600.00",
     dueDate: "2026-10-10",
-    category: "Cartão",
-    status: "PARTIAL",
-  });
-  const invalidResult = createExpenseSchema.safeParse({
-    description: "Cartão",
-    referenceAmount: "4200.00",
-    paidAmount: "2100.00",
-    dueDate: "2026-10-10",
-    category: "Cartão",
-    status: "PENDING",
+    category: "Alimentação",
+    status: "PAID",
   });
 
-  assert.equal(validResult.success, true);
-  assert.equal(invalidResult.success, false);
+  assert.equal(result.success, true);
 });
 
 test("calculates monthly balances in cents", () => {

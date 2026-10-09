@@ -16,16 +16,35 @@ const value = (formData: FormData, name: string) =>
   typeof formData.get(name) === "string" ? String(formData.get(name)) : "";
 
 function payload(formData: FormData) {
-  return createExpenseSchema.safeParse({
+  const requestedStatus = value(formData, "status") || "PENDING";
+  const normalizedPaidAmount = normalizeCurrencyInput(
+    value(formData, "paidAmount") || "0",
+  );
+  const parsed = createExpenseSchema.safeParse({
     description: value(formData, "description"),
     referenceAmount: normalizeCurrencyInput(value(formData, "referenceAmount")),
-    paidAmount: normalizeCurrencyInput(value(formData, "paidAmount") || "0"),
+    paidAmount:
+      requestedStatus === "PENDING" || requestedStatus === "CANCELLED"
+        ? "0"
+        : normalizedPaidAmount,
     dueDate: value(formData, "dueDate"),
-    paidAt: value(formData, "paidAt") || undefined,
     category: value(formData, "category"),
-    status: value(formData, "status") || "PENDING",
+    status: requestedStatus,
     notes: value(formData, "notes") || undefined,
   });
+  if (!parsed.success) return parsed;
+
+  return {
+    data: parsed.data,
+    success: true as const,
+  };
+}
+
+function paymentDate(
+  status: "PENDING" | "PAID" | "CANCELLED",
+  dueDate: string,
+) {
+  return status === "PAID" ? dueDate : null;
 }
 
 async function session() {
@@ -57,7 +76,7 @@ export async function createExpense(
     reference_amount: parsed.data.referenceAmount,
     paid_amount: parsed.data.paidAmount,
     due_date: parsed.data.dueDate,
-    paid_at: parsed.data.paidAt ?? null,
+    paid_at: paymentDate(parsed.data.status, parsed.data.dueDate),
     category: parsed.data.category,
     status: parsed.data.status,
     notes: parsed.data.notes ?? null,
@@ -73,7 +92,8 @@ export async function updateExpense(
 ): Promise<ExpenseActionState> {
   const id = idSchema.safeParse(value(formData, "id"));
   const parsed = payload(formData);
-  if (!id.success || !parsed.success)
+  if (!id.success) return { error: "Despesa inválida." };
+  if (!parsed.success)
     return { error: parsed.error?.issues[0]?.message ?? "Dados inválidos." };
   const auth = await session();
   if ("error" in auth) return auth;
@@ -84,7 +104,7 @@ export async function updateExpense(
       reference_amount: parsed.data.referenceAmount,
       paid_amount: parsed.data.paidAmount,
       due_date: parsed.data.dueDate,
-      paid_at: parsed.data.paidAt ?? null,
+      paid_at: paymentDate(parsed.data.status, parsed.data.dueDate),
       category: parsed.data.category,
       status: parsed.data.status,
       notes: parsed.data.notes ?? null,

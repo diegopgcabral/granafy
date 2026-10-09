@@ -1,6 +1,12 @@
 "use client";
 
-import { useRef, useState, useTransition, type FormEvent } from "react";
+import {
+  useRef,
+  useState,
+  useTransition,
+  type FormEvent,
+  type MouseEvent,
+} from "react";
 import { useRouter } from "next/navigation";
 
 import {
@@ -33,6 +39,12 @@ export function ExpenseCategorySettings({
 }) {
   const [isCreating, setIsCreating] = useState(false);
   const [iconPickerId, setIconPickerId] = useState<string>();
+  const [actionMenu, setActionMenu] = useState<{
+    category: Category;
+    bottom?: number;
+    right: number;
+    top?: number;
+  }>();
   const [filter, setFilter] = useState<"ALL" | "ACTIVE" | "PAUSED">("ALL");
   const [isChanging, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement>(null);
@@ -60,6 +72,7 @@ export function ExpenseCategorySettings({
     operation: "activate" | "deactivate" | "delete",
   ) {
     const deleting = operation === "delete";
+    setActionMenu(undefined);
     startTransition(async () => {
       const result = deleting
         ? await deleteExpenseCategory(category.id)
@@ -79,6 +92,26 @@ export function ExpenseCategorySettings({
             : `Categoria “${category.name}” pausada.`,
       );
       router.refresh();
+    });
+  }
+
+  function toggleActionMenu(
+    event: MouseEvent<HTMLButtonElement>,
+    category: Category,
+  ) {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const right = window.innerWidth - bounds.right;
+    const shouldOpenUpward = window.innerHeight - bounds.bottom < 116;
+
+    setActionMenu((current) => {
+      if (current?.category.id === category.id) return undefined;
+      return shouldOpenUpward
+        ? {
+            category,
+            bottom: window.innerHeight - bounds.top + 8,
+            right,
+          }
+        : { category, right, top: bounds.bottom + 8 };
     });
   }
 
@@ -250,50 +283,69 @@ export function ExpenseCategorySettings({
                 </div>
               </div>
 
-              <details className="relative shrink-0">
-                <summary
-                  aria-label={`Ações para ${category.name}`}
-                  className="flex size-9 cursor-pointer list-none items-center justify-center rounded-lg text-slate-400 transition hover:bg-[#272a30] hover:text-white [&::-webkit-details-marker]:hidden"
-                >
-                  <Icon className="size-5" name="more" />
-                </summary>
-                <div className="absolute top-10 right-0 z-10 w-48 rounded-xl border border-white/10 bg-[#272a30] p-1.5 shadow-2xl">
-                  {category.is_active ? (
-                    <button
-                      className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-slate-200 hover:bg-white/5 disabled:opacity-50"
-                      disabled={isChanging}
-                      onClick={() => updateCategory(category, "deactivate")}
-                      type="button"
-                    >
-                      <Icon className="size-4" name="pause" />
-                      Pausar
-                    </button>
-                  ) : (
-                    <button
-                      className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-emerald-300 hover:bg-emerald-400/10 disabled:opacity-50"
-                      disabled={isChanging}
-                      onClick={() => updateCategory(category, "activate")}
-                      type="button"
-                    >
-                      <Icon className="size-4" name="plus" />
-                      Ativar
-                    </button>
-                  )}
-                  <button
-                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-red-300 hover:bg-red-400/10 disabled:opacity-50"
-                    disabled={isChanging}
-                    onClick={() => updateCategory(category, "delete")}
-                    type="button"
-                  >
-                    <Icon className="size-4" name="trash" />
-                    Excluir
-                  </button>
-                </div>
-              </details>
+              <button
+                aria-label={`Ações para ${category.name}`}
+                className="flex size-9 cursor-pointer list-none items-center justify-center rounded-lg text-slate-400 transition hover:bg-[#272a30] hover:text-white [&::-webkit-details-marker]:hidden"
+                onClick={(event) => toggleActionMenu(event, category)}
+                type="button"
+              >
+                <Icon className="size-5" name="more" />
+              </button>
             </li>
           ))}
         </ul>
       </div>
+      {actionMenu ? (
+        <>
+          <button
+            aria-label="Fechar ações da categoria"
+            className="fixed inset-0 z-40 cursor-default"
+            onClick={() => setActionMenu(undefined)}
+            type="button"
+          />
+          <div
+            className="fixed z-50 w-48 rounded-xl border border-white/10 bg-[#272a30] p-1.5 shadow-2xl"
+            style={{
+              bottom: actionMenu.bottom,
+              right: actionMenu.right,
+              top: actionMenu.top,
+            }}
+          >
+            {actionMenu.category.is_active ? (
+              <button
+                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-slate-200 hover:bg-white/5 disabled:opacity-50"
+                disabled={isChanging}
+                onClick={() =>
+                  updateCategory(actionMenu.category, "deactivate")
+                }
+                type="button"
+              >
+                <Icon className="size-4" name="pause" />
+                Pausar
+              </button>
+            ) : (
+              <button
+                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-emerald-300 hover:bg-emerald-400/10 disabled:opacity-50"
+                disabled={isChanging}
+                onClick={() => updateCategory(actionMenu.category, "activate")}
+                type="button"
+              >
+                <Icon className="size-4" name="plus" />
+                Ativar
+              </button>
+            )}
+            <button
+              className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-red-300 hover:bg-red-400/10 disabled:opacity-50"
+              disabled={isChanging}
+              onClick={() => updateCategory(actionMenu.category, "delete")}
+              type="button"
+            >
+              <Icon className="size-4" name="trash" />
+              Excluir
+            </button>
+          </div>
+        </>
+      ) : null}
       {iconPickerCategory ? (
         <div
           aria-modal="true"

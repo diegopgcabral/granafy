@@ -28,6 +28,11 @@ body {
   box-shadow: 0 0 0 3px rgb(52 211 153 / 0.12);
 }
 
+.category-search-input {
+  padding-right: 2.75rem;
+  padding-left: 2.75rem;
+}
+
 .granafy-grid {
   background-image:
     linear-gradient(to right, rgb(255 255 255 / 0.03) 1px, transparent 1px),

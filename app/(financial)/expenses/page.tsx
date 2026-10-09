@@ -25,6 +25,7 @@ export default async function ExpensesPage({
   const userId = claims?.claims.sub;
   let expenses: ExpenseListItem[] = [];
   let categories: string[] = [];
+  let categoryIcons: Record<string, string | null> = {};
 
   if (typeof userId === "string") {
     const { data: profile } = await supabase
@@ -59,11 +60,18 @@ export default async function ExpensesPage({
     }));
     const { data: categoryRows } = await supabase
       .from("expense_categories")
-      .select("name")
+      .select("name, icon_key, is_active")
       .eq("user_id", userId)
-      .eq("is_active", true)
       .order("name");
-    categories = (categoryRows ?? []).map((category) => category.name);
+    categories = (categoryRows ?? [])
+      .filter((category) => category.is_active)
+      .map((category) => category.name);
+    categoryIcons = Object.fromEntries(
+      (categoryRows ?? []).map((category) => [
+        category.name,
+        category.icon_key,
+      ]),
+    );
   }
   const totals = calculateExpenseTotals(expenses);
 
@@ -71,6 +79,7 @@ export default async function ExpensesPage({
     <section>
       <ExpenseManager
         categories={categories}
+        categoryIcons={categoryIcons}
         expenses={expenses}
         month={month}
         totals={totals}

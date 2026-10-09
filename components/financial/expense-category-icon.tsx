@@ -56,7 +56,7 @@ const categoryRules: Array<[string[], ExpenseCategoryIconKey, string]> = [
     "car",
     "text-amber-300 bg-amber-400/10 border-amber-400/20",
   ],
-  [["invest"], "investment", "text-lime-300 bg-lime-400/10 border-lime-400/20"],
+  [["invest"], "money", "text-lime-300 bg-lime-400/10 border-lime-400/20"],
   [
     ["compra", "loja"],
     "shopping",
@@ -94,6 +94,7 @@ const iconColors: Record<ExpenseCategoryIconKey, string> = {
   insurance: "text-indigo-300 bg-indigo-400/10 border-indigo-400/20",
   gym: "text-rose-300 bg-rose-400/10 border-rose-400/20",
   investment: "text-lime-300 bg-lime-400/10 border-lime-400/20",
+  money: "text-emerald-300 bg-emerald-400/10 border-emerald-400/20",
   shopping: "text-orange-300 bg-orange-400/10 border-orange-400/20",
   leisure: "text-fuchsia-300 bg-fuchsia-400/10 border-fuchsia-400/20",
   domestic: "text-teal-300 bg-teal-400/10 border-teal-400/20",
@@ -124,9 +125,11 @@ function isIconKey(
 export function ExpenseCategoryIcon({
   name,
   iconKey,
+  compact = false,
 }: {
   name: string;
   iconKey?: string | null;
+  compact?: boolean;
 }) {
   const normalized = normalize(name);
   const match = categoryRules.find(([terms]) =>
@@ -138,10 +141,10 @@ export function ExpenseCategoryIcon({
   return (
     <span
       aria-hidden="true"
-      className={`flex size-11 shrink-0 items-center justify-center rounded-xl border ${colors}`}
+      className={`flex shrink-0 items-center justify-center border ${compact ? "size-8 rounded-lg" : "size-11 rounded-xl"} ${colors}`}
     >
       <svg
-        className="size-5"
+        className={compact ? "size-4" : "size-5"}
         fill="none"
         stroke="currentColor"
         strokeLinecap="round"
@@ -201,6 +204,10 @@ function CategoryIconPath({ icon }: { icon: ExpenseCategoryIconKey }) {
       return <path d="M4 9v6m3-8v10m10-10v10m3-8v6M7 12h10" />;
     case "investment":
       return <path d="m4 16 5-5 3 3 7-8M15 6h4v4M4 20h16" />;
+    case "money":
+      return (
+        <path d="M3 6h18v12H3V6Zm4 6h.01M17 12h.01M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" />
+      );
     case "shopping":
       return <path d="M5 8h14l-1 12H6L5 8Zm3 0a4 4 0 0 1 8 0" />;
     case "leisure":
