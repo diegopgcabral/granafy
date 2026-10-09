@@ -536,6 +536,16 @@ export function ExpenseManager({
             placeholder="Filtrar lançamentos…"
             value={query}
           />
+          {query ? (
+            <button
+              aria-label="Limpar filtro"
+              className="absolute top-1/2 right-2 flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
+              onClick={() => setQuery("")}
+              type="button"
+            >
+              <Icon className="size-4" name="close" />
+            </button>
+          ) : null}
         </div>
         <div className="flex gap-2 overflow-x-auto">
           {(["ALL", ...statuses] as const).map((item) => (
