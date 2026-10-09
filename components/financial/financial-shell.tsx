@@ -61,7 +61,7 @@ export function FinancialShell({
                 </svg>
               </span>
               <span className="text-xl font-bold tracking-tight text-white">
-                Granafy<span className="text-emerald-400">.</span>
+                NexSaldo<span className="text-emerald-400">.</span>
               </span>
             </Link>
             <nav aria-label="Navegação principal" className="mt-8 space-y-1">

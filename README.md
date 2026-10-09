@@ -1,4 +1,4 @@
-# Granafy
+# NexSaldo
 
 Aplicação web para gestão financeira pessoal. O escopo e a sequência de desenvolvimento estão em [spec.md](./spec.md).
 
