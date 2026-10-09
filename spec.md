@@ -1,14 +1,14 @@
-Sim. E para o Granafy eu concordo com você: **começaria monolítico**.
+Sim. E para o NexSaldo eu concordo com você: **começaria monolítico**.
 
 Na verdade, acho que é uma decisão melhor para esse projeto do que separar frontend + backend agora. Você vai desenvolver sozinho, quer colocar no ar rapidamente e ainda está aprendendo/experimentando a arquitetura com IA. Um monólito bem organizado permite crescer bastante sem criar complexidade prematura.
 
 Abaixo está um documento que você pode usar como **especificação inicial do projeto e como contexto para o Codex**.
 
-# Granafy
+# NexSaldo
 
 ## Seu copiloto financeiro pessoal
 
-O Granafy é uma aplicação web de gestão financeira pessoal, desenvolvida para substituir uma planilha de controle financeiro por uma aplicação moderna, acessível de qualquer lugar e preparada para utilizar Inteligência Artificial como interface de interação.
+O NexSaldo é uma aplicação web de gestão financeira pessoal, desenvolvida para substituir uma planilha de controle financeiro por uma aplicação moderna, acessível de qualquer lugar e preparada para utilizar Inteligência Artificial como interface de interação.
 
 A aplicação deverá ser totalmente hospedada na nuvem, permitindo acesso pelo computador, notebook, tablet ou celular.
 
@@ -18,7 +18,7 @@ O projeto será desenvolvido inicialmente como um **monólito modular**, evitand
 
 # 1. Objetivo do projeto
 
-O objetivo inicial do Granafy é permitir que o usuário acompanhe:
+O objetivo inicial do NexSaldo é permitir que o usuário acompanhe:
 
 - Receitas
 - Despesas
@@ -53,7 +53,7 @@ Ele deverá interpretar a intenção do usuário e utilizar ferramentas/domínio
 
 # 2. Princípio arquitetural
 
-O Granafy será inicialmente um:
+O NexSaldo será inicialmente um:
 
 **Monólito modular**
 
@@ -72,7 +72,7 @@ A aplicação será um único projeto.
                     ┌─────────────────────┐
                     │       Vercel        │
                     │                     │
-                    │      Granafy        │
+                    │      NexSaldo        │
                     │                     │
                     │  Next.js            │
                     │  React               │
@@ -208,7 +208,7 @@ A estrutura deverá ser simples e organizada.
 Uma sugestão:
 
 ```text
-granafy/
+nexsaldo/
 ├── app/
 │   ├── dashboard/
 │   ├── expenses/
@@ -481,7 +481,7 @@ Patrimônio
 
 # 15. Copilot
 
-O Copilot será uma das principais funcionalidades do Granafy.
+O Copilot será uma das principais funcionalidades do NexSaldo.
 
 Ele permitirá utilizar linguagem natural para interagir com o sistema.
 
@@ -715,7 +715,7 @@ Isso reduz custo e aumenta a confiabilidade.
 
 # 21. Segurança
 
-Como o Granafy trabalha com dados financeiros, segurança deverá ser considerada desde o início.
+Como o NexSaldo trabalha com dados financeiros, segurança deverá ser considerada desde o início.
 
 Regras:
 
@@ -785,7 +785,7 @@ Layout inicial:
 
 ```text
 ┌──────────────────────────────────────────────┐
-│ GRANAfy                                      │
+│ NEXSaldo                                     │
 ├──────────────┬───────────────────────────────┤
 │              │                               │
 │ Dashboard    │                               │
@@ -956,7 +956,7 @@ O Codex deverá ser utilizado como parceiro de desenvolvimento, não como gerado
 
 Evitar prompts como:
 
-> "Crie todo o Granafy."
+> "Crie todo o NexSaldo."
 
 Preferir tarefas pequenas e verificáveis.
 
@@ -1070,7 +1070,7 @@ Supabase
 Inicialmente poderá utilizar:
 
 ```text
-granafy.vercel.app
+nexsaldobr.vercel.app
 ```
 
 Posteriormente poderá ser registrado um domínio próprio.
@@ -1078,7 +1078,7 @@ Posteriormente poderá ser registrado um domínio próprio.
 Exemplo:
 
 ```text
-granafy.com.br
+nexsaldo.com.br
 ```
 
 ou outro domínio disponível.
@@ -1087,7 +1087,7 @@ ou outro domínio disponível.
 
 # 30. Princípio mais importante do projeto
 
-O Granafy não deverá ser desenvolvido como uma aplicação gigante desde o primeiro dia.
+O NexSaldo não deverá ser desenvolvido como uma aplicação gigante desde o primeiro dia.
 
 O objetivo é chegar rapidamente a:
 
@@ -1174,10 +1174,10 @@ Ele deverá entrar depois que o domínio financeiro estiver sólido.
 
 # 32. Visão futura
 
-A visão final do Granafy é:
+A visão final do NexSaldo é:
 
 ```text
-                         GRANAfy
+                         NEXSaldo
                             │
           ┌─────────────────┼─────────────────┐
           │                 │                 │
@@ -1209,12 +1209,12 @@ O Copilot será a camada inteligente sobre o sistema, e não o próprio sistema.
 
 O primeiro objetivo técnico é simples:
 
-**Colocar o Granafy no ar.**
+**Colocar o NexSaldo no ar.**
 
 Ao terminar a primeira etapa, deverá ser possível acessar:
 
 ```text
-https://granafy.vercel.app
+https://nexsaldobr.vercel.app
 ```
 
 fazer login e visualizar a aplicação.
@@ -1239,4 +1239,4 @@ O primeiro corte publicável é A2. O primeiro corte com dados protegidos é B2.
 
 Antes de iniciar uma etapa, abrir uma issue ou tarefa curta contendo objetivo, critério de aceite e dependências. Ao concluí-la, anexar a evidência da verificação manual, abrir um pull request quando aplicável e publicar. Isso mantém o trabalho pequeno, revisável e fácil de retomar.
 
-Eu começaria **exatamente pelo passo 1**, e não pelo banco: criar o repositório e o projeto Next.js, conectar ao GitHub e colocar a primeira versão vazia na Vercel. A partir daí, podemos ir construindo o Granafy com o Codex em etapas pequenas.
+Eu começaria **exatamente pelo passo 1**, e não pelo banco: criar o repositório e o projeto Next.js, conectar ao GitHub e colocar a primeira versão vazia na Vercel. A partir daí, podemos ir construindo o NexSaldo com o Codex em etapas pequenas.

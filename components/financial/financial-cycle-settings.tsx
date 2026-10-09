@@ -44,7 +44,7 @@ export function FinancialCycleSettings({ initialDay }: { initialDay: number }) {
             Configurações
           </h1>
           <p className="mt-2 text-sm text-slate-400">
-            Personalize como o Granafy organiza sua vida financeira.
+            Personalize como o NexSaldo organiza sua vida financeira.
           </p>
         </div>
         <div className="rounded-xl bg-[#111319]/80 p-5">

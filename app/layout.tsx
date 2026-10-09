@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Granafy",
+  title: "NexSaldo",
   description: "Seu copiloto financeiro pessoal.",
 };
 
